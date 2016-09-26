@@ -31,7 +31,7 @@
 #define io_library <stdio.h>
 #define str_library <string.h>
 #define std_library <stdlib.h>
-#define array_lib "array1.h"
+#define array_lib "array.h"
 #define print printf
 #define scanf scan
 #define AND &&
