@@ -54,6 +54,10 @@ class List{
         void insert(double data, int index);
         bool is_in(double data);
         int index(double data);
+        double sum();
+        void sort();
+        double data_at(int index);
+        void replace(int index, double data);
 };
 
 void List::push(double data)
@@ -78,7 +82,7 @@ void List::remove(double data)
     temp = this->head;
     if((this->head)==NULL)
     {        
-        cout << "Empty list" << endl;
+        std::cout << "Empty list" << endl;
         return;
     }
     if(dabs((this->head)->getData() - data) <= epsilon )
@@ -101,7 +105,7 @@ void List::remove(double data)
     }
     this->head = temp;
     
-    cout << "Element - "<<  data <<" - not found." << endl;
+    std::cout << "Element - "<<  data <<" - not found." << endl;
 
 }
 
@@ -109,17 +113,17 @@ void List::remove(double data)
 
 void List::display()
 {
-    cout.precision(PREC);
+    std::cout.precision(PREC);
     Node *temp=new Node();
     temp = this->head;
-    cout << "{ ";
+    std::cout << "{ ";
     while(this->head!=NULL)
     {        
-        cout << fixed << this->head->getData() << ", " ;
+        std::cout << fixed << this->head->getData() << ", " ;
         this->head = this->head->getNext();
     }
     this->head = temp;
-    cout << "}" << endl;
+    std::cout << "}" << endl;
 }
 
 double List::pop()
@@ -132,7 +136,7 @@ double List::pop()
 
     if(this->head == NULL)
     {
-        cout << "List empty" << endl;
+        std::cout << "List empty" << endl;
         return -999999;
     }
     else 
@@ -198,7 +202,7 @@ void List::removeAt(int index)
     head = this->head;
     if(index >= (this)->len() || index<0)
     {
-        cout <<  "Index out of range" << endl;
+        std::cout <<  "Index out of range" << endl;
         return;
     }//works
     if(index==0)
@@ -232,7 +236,7 @@ void List::insert(double data, int index)
     head = this->head;
     if(index >= (this)->len()+1 || index<0)
     {
-        cout <<  "Index out of range" << endl;
+        std::cout <<  "Index out of range" << endl;
         return;
     }//works
     else if(index==0)
@@ -282,9 +286,13 @@ bool List::is_in(double data)
     while(this->head!=NULL)
     {
         if((this->head->getData() - data)<epsilon)
+        {
+            this->head=temp;
             return true;
+        }
         this->head = this->head->getNext();
     }
+    this->head=temp;
     return false;
 }
 
@@ -297,13 +305,100 @@ int List::index(double data)
     {   
         
         if((this->head->getData() - data)<epsilon)
+        {
+            this->head=temp;
             return count;
+        }
         this->head = this->head->getNext();
         count++;
     }
+    this->head=temp;
     return -1;
 }
 
+double List::sum()
+{
+    double sum=0;
+    Node* temp  = new Node();
+    temp  = this->head;
+    while(this->head!=NULL)
+    {   
+        sum += (this->head)->getData();        
+        this->head = this->head->getNext();        
+    }
+    this->head=temp;
+    return sum;
+}
+
+double List::data_at(int index)
+{
+    if(index < 0 || index >= this->len())
+    {
+        std::cout << "Index out of range" << endl;
+        return -9999999;
+    }
+    int count=0;
+    Node* temp  = new Node();
+    temp  = this->head;
+    while(this->head!=NULL)
+    {
+        if(count==index)
+        {
+            double data = this->head->getData();
+            this->head  = temp;
+            return data ;
+        }
+        this->head = this->head->getNext();  
+        count++;
+    }
+    this->head=temp;
+}
+
+void List::replace(int index, double data)
+{
+    if(index < 0 || index > this->len())
+    {
+        std::cout << "Index out of range" << endl;
+        return;
+    }
+    int count=0;
+    Node* temp  = new Node();
+    temp  = this->head;
+    while(this->head!=NULL)
+    {
+        if(count==index)
+        {
+            this->head->setData(data);
+            this->head  = temp;
+            return;
+        }
+        this->head = this->head->getNext();  
+        count++;
+    }
+    this->head=temp;
+    
+}
+
+void List::sort()
+{
+    Node *temp =  new Node();
+    temp = this->head;
+    
+    for(int i =0; i<this->len(); i++)
+    {
+        for(int j=0; j<this->len()-i-1; j++)
+        {
+            if(this->data_at(j) > this->data_at(j+1) )
+            {
+                double temp1 = this->data_at(j);
+                double temp2 = this->data_at(j+1);
+                this->replace(j, temp2);
+                this->replace(j+1, temp1);
+            }
+        }
+    }
+    this->head=temp;
+}
 
 double dabs(double num)
 {
